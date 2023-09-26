@@ -83,7 +83,7 @@ dimensionedTensor("omega_dot",dimensionSet(0, 0, -1, 0, 0),tensor::zero)//,
                // zeroGradientFvPatchTensorField::typeName
 );
 
-volTensorField epsilon_dot
+volSymmTensorField epsilon_dot
 (
     IOobject
     (
@@ -94,7 +94,7 @@ volTensorField epsilon_dot
         IOobject::AUTO_WRITE
     ),
         mesh,
-dimensionedTensor("epsilon_dot",dimensionSet(0, 0, -1, 0, 0),tensor::zero)//,
+dimensionedSymmTensor("epsilon_dot",dimensionSet(0, 0, -1, 0, 0),symmTensor::zero)//,
                // zeroGradientFvPatchTensorField::typeName
 );
 

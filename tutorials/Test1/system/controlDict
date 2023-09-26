@@ -23,7 +23,7 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         0.1;
+endTime         1e-5;//0.1;
 
 deltaT          1.0e-16;
 
@@ -43,7 +43,7 @@ timeFormat      general;
 
 timePrecision   10;
 
-runTimeModifiable yes;
+runTimeModifiable no;
 
 adjustTimeStep  yes;
 

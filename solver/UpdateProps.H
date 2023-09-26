@@ -1,3 +1,4 @@
+const volTensorField gradU(fvc::grad(U));
 {
 
 rhoPhi = fvc::interpolate(rho)*fvc::flux(U);
@@ -5,18 +6,20 @@ phi=fvc::flux(U);
 
 dimensionedScalar shear_mod ("shear_mod", dimensionSet(1,-1,-2,0,0,0,0),80e9);
 
-volTensorField TgradU(fvc::grad(U)().T());
-TgradU.correctBoundaryConditions(); // already called by line above
+//volTensorField TgradU(gradU.T());
+//TgradU.correctBoundaryConditions(); // already called by line above
 
 // volTensorField TgradD = (fvc::grad(D)().T());
 // TgradD.correctBoundaryConditions();
 // gradU = fvc::grad(fvc::interpolate(U));
 
 
-omega_dot = 0.5*(fvc::grad(U)-TgradU); // this is the "symm" function, i.e. symm(gradU)
-omega_dot.correctBoundaryConditions(); // already called by line above
-epsilon_dot = 0.5*(fvc::grad(U)+TgradU) - (1.0/3.0)*(fvc::div(phi))*I; // this looks like dev(gradU)
-epsilon_dot.correctBoundaryConditions(); // already called by line above
+omega_dot = skew(gradU);
+//omega_dot = 0.5*(fvc::grad(U)-TgradU); // this is the "skew" function, i.e. skew(gradU)
+//omega_dot.correctBoundaryConditions(); // already called by line above
+epsilon_dot = dev(symm(gradU));
+// epsilon_dot = 0.5*(fvc::grad(U)+TgradU) - (1.0/3.0)*(fvc::div(phi))*I; // this looks like dev(gradU)
+// epsilon_dot.correctBoundaryConditions(); // already called by line above
 
 // epsilon = 0.5*(fvc::grad(D)-TgradD);
 // epsilon.correctBoundaryConditions();
@@ -26,6 +29,38 @@ dsdt = - ((s & omega_dot) - (omega_dot & s));
 
 
 // surfaceTensorField epsilon_dotf = fvc::interpolate(epsilon_dot);
+
+// C seems to be constant within this forAll loop; if so, this should be
+// created once outside this loop
+Fastor::Tensor<double,3,3,3,3> C(0.0);
+
+double C11 = 8.0e10;
+double C12 = 8.0e10;
+double C44 = 8.0e10;
+
+
+C(0,0,0,0)=C11;
+C(1,1,1,1)=C11;
+C(2,2,2,2)=C11;
+
+C(1,0,1,0)=C44;
+C(2,0,2,0)=C44;
+C(0,0,1,1)=C12;
+C(1,0,0,1)=C44;
+C(0,0,2,2)=C12;
+C(2,0,0,2)=C44;
+C(0,1,1,0)=C44;
+C(1,1,0,0)=C12;
+C(0,1,0,1)=C44;
+C(2,1,2,1)=C44;
+C(1,1,2,2)=C12;
+C(2,1,1,2)=C44;
+C(0,2,2,0)=C44;
+C(2,2,0,0)=C12;
+C(1,2,2,1)=C44;
+C(2,2,1,1)=C12;
+C(0,2,0,2)=C44;
+C(1,2,1,2)=C44;
 
 dsdt_crystal*=0.0;
 forAll(mesh.C(), cell)
@@ -44,41 +79,6 @@ forAll(mesh.C(), cell)
 
 
 //     }
-
-
-
-
-    // C seems to be constant within this forAll loop; if so, this should be
-    // created once outside this loop
-Fastor::Tensor<double,3,3,3,3> C(0.0);
-
-  double C11 = 8.0e10;
-  double C12 = 8.0e10;
-  double C44 = 8.0e10;
-
-
-  C(0,0,0,0)=C11;
-  C(1,1,1,1)=C11;
-  C(2,2,2,2)=C11;
-
-  C(1,0,1,0)=C44;
-  C(2,0,2,0)=C44;
-  C(0,0,1,1)=C12;
-  C(1,0,0,1)=C44;
-  C(0,0,2,2)=C12;
-  C(2,0,0,2)=C44;
-  C(0,1,1,0)=C44;
-  C(1,1,0,0)=C12;
-  C(0,1,0,1)=C44;
-  C(2,1,2,1)=C44;
-  C(1,1,2,2)=C12;
-  C(2,1,1,2)=C44;
-  C(0,2,2,0)=C44;
-  C(2,2,0,0)=C12;
-  C(1,2,2,1)=C44;
-  C(2,2,1,1)=C12;
-  C(0,2,0,2)=C44;
-  C(1,2,1,2)=C44;
 
 // Fastor::Tensor<double,3,3> I2={{1.0,0.0,0.0},
 //                                  {0.0,1.0,0.0},
@@ -142,6 +142,7 @@ for(int i = 0 ; i < 3 ; i++ ){
 }
 dsdt_crystal.correctBoundaryConditions();
 dsdt+=dsdt_crystal;
+//dsdt = 1.0*dsdt_crystal; // no Jaumann rate correction
 
 // dsdt_crystal.write();
 // exit(0);

@@ -43,7 +43,11 @@ divSchemes
     div(testSIG)	Gauss linear;//cubic;
     
     div(interpolate(U),rho)	Gauss linear;
-}
+    div(grad(U)) Gauss linear;
+    div(grad(U).T()) Gauss linear;
+    div(twoSymm(grad(U))) Gauss linear;
+    div(((grad(U)+grad(U).T())+(tr(grad(U))*(1))))  Gauss linear;
+ }
 
 laplacianSchemes
 {

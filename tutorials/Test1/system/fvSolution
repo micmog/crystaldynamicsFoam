@@ -14,6 +14,9 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+// Scale Rhie-Chow stabilisation
+alpha    1.0;
+
 solvers
 {
     "alpha.metal.*"
@@ -162,6 +165,10 @@ relaxationFactors
     {
         ".*" 1;
     }
+    // fields
+    // {
+    //     U    0.7;
+    // }
 }
 
 
