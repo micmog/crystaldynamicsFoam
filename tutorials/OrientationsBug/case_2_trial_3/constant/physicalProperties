@@ -1,0 +1,35 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      physicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+Cv	500;
+
+kappa	20.0;
+
+rho_0	7800;
+
+sigma_Y_0	250e6;
+
+Hardening true;
+
+
+K_0	100e6;
+K_n	0.5;
+K_B	1.0;
+K_Beta_0	1e-3;
+K_Beta_1	0.0;
+
+// ************************************************************************* //

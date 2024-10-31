@@ -1,0 +1,83 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ 
+ddtSchemes
+{
+    default         Euler;
+}
+
+gradSchemes
+{
+    default         leastSquares;//Gauss linear;//cellLimited Gauss linear 1.0;;//leastSquares;//
+}
+
+divSchemes
+{
+    div(rhoPhi,U)  Gauss linearUpwind grad(U);
+    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
+    div(rhoPhi,epsilon1)	Gauss linear;//Gauss vanLeer01;
+    div((interpolate(cp)*rhoPhi),T)   Gauss upwind;
+    
+    div(U)	Gauss linear;//cubic;
+    
+    div(sigma)	Gauss linear;
+    //div(testSIG)	Gauss linear;//cubic;
+    
+    div(interpolate(U),rho)	Gauss linear;
+    
+    div(rhoPhi,K)	Gauss upwind;//Gauss linear;
+    div((Cv*rhoPhi),T)	Gauss upwind;//Gauss linear;
+    div((sigma&U))	Gauss linear;
+    div(phi,rho)	Gauss ROUNDAplus;//Gauss linear;//Gauss ROUNDAplus;//Gauss linear;//Gauss ROUNDAplus;//
+    
+    
+    div(rhoPhi,Acc_Strain)	Gauss ROUNDAplus;//Gauss linear;//Gauss ROUNDAplus;//Gauss linear;
+    
+   
+    "div\(rhoPhi,n.*\)"	Gauss ROUNDAplus01;//Gauss ROUNDAplus;//Gauss linear;
+    
+
+    "div\(rhoPhi,g_alpha.*\)"	Gauss ROUNDAplus;//Gauss linear;
+    
+   "div\(rhoPhi,gamma_alphas.*.*\)"	Gauss ROUNDAplus;//Gauss ROUNDAplus;//Gauss linear;
+    
+    div(rhoPhi,ROT.1)	Gauss ROUNDAplus;//Gauss linear;
+    div(rhoPhi,ROT.2)	Gauss ROUNDAplus;//Gauss linear;
+    div(rhoPhi,ROT.3)	Gauss ROUNDAplus;//Gauss linear;
+    
+
+	"div\(rhoPhi,ROT.*.*\)"	Gauss ROUNDAplus;//Gauss ROUNDAplus;//Gauss linear;
+    
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default         linear;//linear;//linear;//
+}
+
+snGradSchemes
+{
+    default         corrected;
+}
+
+
+// ************************************************************************* //

@@ -25,6 +25,11 @@ Euler_Angles*=0.0;
 
             double phi_3_total = Rot3[h][cell]; // ROT_3[cell];// phi3[h] ;//+ omega_tot[cell].component(1);
 
+            Info << "******Line 27*****" << endl;
+            Info << "Grain: "  << h << endl;
+            Info << "phi_1_total: "  << phi_1_total << endl;
+            Info << "phi_2_total: "  << phi_2_total << endl;
+            Info << "phi_3_total: "  << phi_3_total << endl;
 
             Fastor::Tensor<double, 3, 3> Rot_matrix(0.0);
 
@@ -52,6 +57,15 @@ Euler_Angles*=0.0;
       Rot_matrix(2, 1) = Foam::sin(phi_1_total) * Foam::cos(phi_2_total);
       Rot_matrix(2, 2) = Foam::cos(phi_1_total) * Foam::cos(phi_2_total);
 
+      Info << "Rot_matrix(0, 0): "  << Rot_matrix(0, 0) << endl;
+      Info << "Rot_matrix(0, 1): "  << Rot_matrix(0, 1) << endl;
+      Info << "Rot_matrix(0, 2): "  << Rot_matrix(0, 2) << endl;
+      Info << "Rot_matrix(1, 0): "  << Rot_matrix(1, 0) << endl;
+      Info << "Rot_matrix(1, 1): "  << Rot_matrix(1, 1) << endl;
+      Info << "Rot_matrix(1, 2): "  << Rot_matrix(1, 2) << endl;
+      Info << "Rot_matrix(2, 0): "  << Rot_matrix(2, 0) << endl;
+      Info << "Rot_matrix(2, 1): "  << Rot_matrix(2, 1) << endl;
+      Info << "Rot_matrix(2, 2): "  << Rot_matrix(2, 2) << endl;
 
 
       // Fastor::print("Rot Matrix: ",Rot_matrix);
@@ -249,6 +263,11 @@ forAll(dsigmadt.boundaryField(), patchI)
 
       double phi_3_total = Rot3[h].boundaryField()[patchI][faceI]; // ROT_3[cell];// phi3[h] ;//+ omega_tot[cell].component(1);
 
+      Info << "******Line 265*****" << endl;
+      Info << "Grain: "  << h << endl;
+      Info << "phi_1_total: "  << phi_1_total << endl;
+      Info << "phi_2_total: "  << phi_2_total << endl;
+      Info << "phi_3_total: "  << phi_3_total << endl;
 
       Fastor::Tensor<double, 3, 3> Rot_matrix(0.0);
 
@@ -266,6 +285,15 @@ forAll(dsigmadt.boundaryField(), patchI)
       // https://en.wikipedia.org/wiki/Rotation_matrix -
       //"represents an extrinsic rotation whose (improper) Euler angles are α, β, γ, about axes x, y, z" - phi1 ==alpha, phi2==beta,phi3==gamma
 
+      Info << "Rot_matrix(0, 0): "  << Rot_matrix(0, 0) << endl;
+      Info << "Rot_matrix(0, 1): "  << Rot_matrix(0, 1) << endl;
+      Info << "Rot_matrix(0, 2): "  << Rot_matrix(0, 2) << endl;
+      Info << "Rot_matrix(1, 0): "  << Rot_matrix(1, 0) << endl;
+      Info << "Rot_matrix(1, 1): "  << Rot_matrix(1, 1) << endl;
+      Info << "Rot_matrix(1, 2): "  << Rot_matrix(1, 2) << endl;
+      Info << "Rot_matrix(2, 0): "  << Rot_matrix(2, 0) << endl;
+      Info << "Rot_matrix(2, 1): "  << Rot_matrix(2, 1) << endl;
+      Info << "Rot_matrix(2, 2): "  << Rot_matrix(2, 2) << endl;
 
         double deltaT_ = /*(1.0 / n_sub_steps) */ runTime.deltaT().value(); 
 
