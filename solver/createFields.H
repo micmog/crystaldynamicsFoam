@@ -56,20 +56,20 @@ volTensorField D_P(
     // zeroGradientFvPatchTensorField::typeName
     );
 
-// volTensorField Omega_P
-// (
-//     IOobject
-//     (
-//         "Omega_P",
-//         runTime.timeName(),
-//         mesh,
-//         IOobject::READ_IF_PRESENT,
-//         IOobject::AUTO_WRITE
-//     ),
-//         mesh,
-// dimensionedTensor("Omega_P",dimensionSet(0, 0, -1, 0, 0),tensor::zero),
-//                 zeroGradientFvPatchTensorField::typeName
-// );
+volTensorField Omega_P
+(
+    IOobject
+    (
+        "Omega_P",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+        mesh,
+dimensionedTensor("Omega_P",dimensionSet(0, 0, -1, 0, 0),tensor::zero),
+                zeroGradientFvPatchTensorField::typeName
+);
 
 // volTensorField Omega_E
 // (
@@ -621,6 +621,31 @@ volScalarField sumgamma
                 zeroGradientFvPatchScalarField::typeName
 );
 
+
+// PtrList<volScalarField> total_slip_phase(N_Ori); // pointer to phase fields
+
+// for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
+// {
+
+//     word name_ni("total_slip." + name(count));
+
+//     total_slip_phase.set(
+//         count,
+//         new volScalarField(
+//             IOobject(
+//                 name_ni,
+//                 runTime.timeName(),
+//                 mesh,
+//                 IOobject::READ_IF_PRESENT, // IOobject::MUST_READ,
+//                 IOobject::AUTO_WRITE),
+//             mesh,
+//             dimensionedScalar("ni", dimensionSet(0, 0, 0, 0, 0), 0.0),
+//             zeroGradientFvPatchScalarField::typeName));
+// }
+
+
+
+
 PtrList<volScalarField> PopBal(N_Ori); // pointer to phase fields
 
 for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
@@ -741,30 +766,30 @@ volScalarField GBREF
 
 
 
-PtrList<volTensorField> Omega_P(N_Ori); // pointer to phase fields
+// PtrList<volTensorField> Omega_P(N_Ori); // pointer to phase fields
 
-for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
-{
+// for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
+// {
 
-    word name_Omega_P("nOmega_P." + name(count));
+//     word name_Omega_P("nOmega_P." + name(count));
 
-    Omega_P.set(
-        count,
-        new volTensorField(
-            IOobject(
-                name_Omega_P,
-                runTime.timeName(),
-                mesh,
-                IOobject::READ_IF_PRESENT, // IOobject::MUST_READ,
-                IOobject::AUTO_WRITE),
-            mesh,
-            dimensionedTensor("Omega_P", dimensionSet(0, 0, -1, 0, 0), tensor::zero)//,
-            // zeroGradientFvPatchTensorField::typeName
-            )
-            );
-}
+//     Omega_P.set(
+//         count,
+//         new volTensorField(
+//             IOobject(
+//                 name_Omega_P,
+//                 runTime.timeName(),
+//                 mesh,
+//                 IOobject::READ_IF_PRESENT, // IOobject::MUST_READ,
+//                 IOobject::AUTO_WRITE),
+//             mesh,
+//             dimensionedTensor("Omega_P", dimensionSet(0, 0, -1, 0, 0), tensor::zero)//,
+//             // zeroGradientFvPatchTensorField::typeName
+//             )
+//             );
+// }
 
-Random randObj2(clock::getTime());
+// Random randObj2(clock::getTime());
 
 // double phi1[N_Ori] = {0.0};
 
@@ -800,68 +825,136 @@ List<double> phi3 = GrainProperties.lookup("phi3");
 // phi2[0] = 0.0;
 // phi3[0] = 0.0;
 
-PtrList<volScalarField> Rot1(N_Ori); // pointer to phase fields
+// PtrList<volScalarField> Rot1(N_Ori); // pointer to phase fields
 
-for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
+// for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
+// {
+
+//     word name_ROT("ROT.1." + name(count));
+
+//     Rot1.set(
+//         count,
+//         new volScalarField(
+//             IOobject(
+//                 name_ROT,
+//                 runTime.timeName(),
+//                 mesh,
+//                 IOobject::READ_IF_PRESENT, // IOobject::MUST_READ,
+//                 IOobject::AUTO_WRITE),
+//             mesh,
+//             dimensionedScalar("ROT.1", dimensionSet(0, 0, 0, 0, 0), phi1[count]),
+//             zeroGradientFvPatchScalarField::typeName));
+// }
+
+// PtrList<volScalarField> Rot2(N_Ori); // pointer to phase fields
+
+// for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
+// {
+
+//     word name_ROT("ROT.2." + name(count));
+
+//     Rot2.set(
+//         count,
+//         new volScalarField(
+//             IOobject(
+//                 name_ROT,
+//                 runTime.timeName(),
+//                 mesh,
+//                 IOobject::READ_IF_PRESENT, // IOobject::MUST_READ,
+//                 IOobject::AUTO_WRITE),
+//             mesh,
+//             dimensionedScalar("ROT.2", dimensionSet(0, 0, 0, 0, 0), phi2[count]),
+//             zeroGradientFvPatchScalarField::typeName));
+// }
+
+// PtrList<volScalarField> Rot3(N_Ori); // pointer to phase fields
+
+// for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
+// {
+
+//     word name_ROT("ROT.3." + name(count));
+
+//     Rot3.set(
+//         count,
+//         new volScalarField(
+//             IOobject(
+//                 name_ROT,
+//                 runTime.timeName(),
+//                 mesh,
+//                 IOobject::READ_IF_PRESENT, // IOobject::MUST_READ,
+//                 IOobject::AUTO_WRITE),
+//             mesh,
+//             dimensionedScalar("ROT.3", dimensionSet(0, 0, 0, 0, 0), phi3[count]),
+//             zeroGradientFvPatchScalarField::typeName));
+// }
+
+
+volTensorField RotationMatrixTemp(
+    IOobject(
+        "RotationMatrixTemp",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::NO_WRITE),
+    mesh,
+    dimensionedTensor("RotationMatrixTemp", dimensionSet(0, 0, 0, 0, 0), tensor::zero)//,
+    //  zeroGradientFvPatchTensorField::typeName
+    );
+
+
+
+
+
+for (label i = 0; i < N_Ori; i++)
 {
 
-    word name_ROT("ROT.1." + name(count));
 
-    Rot1.set(
-        count,
-        new volScalarField(
-            IOobject(
-                name_ROT,
-                runTime.timeName(),
-                mesh,
-                IOobject::READ_IF_PRESENT, // IOobject::MUST_READ,
-                IOobject::AUTO_WRITE),
-            mesh,
-            dimensionedScalar("ROT.1", dimensionSet(0, 0, 0, 0, 0), phi1[count]),
-            zeroGradientFvPatchScalarField::typeName));
+ tensor temprot(
+    Foam::cos(phi2[i])*Foam::cos(phi3[i]), 
+    (Foam::sin(phi1[i])*Foam::sin(phi2[i])*Foam::cos(phi3[i]))-(Foam::cos(phi1[i])*Foam::sin(phi3[i])),//-Foam::cos(phi3)*Foam::sin(phi2), 
+    (Foam::cos(phi1[i])*Foam::sin(phi2[i])*Foam::cos(phi3[i]))+(Foam::sin(phi1[i])*Foam::sin(phi3[i])),//Foam::sin(phi2)*Foam::sin(phi3),
+   
+    Foam::cos(phi2[i])*Foam::sin(phi3[i]), 
+    (Foam::sin(phi1[i])*Foam::sin(phi2[i])*Foam::sin(phi3[i]))+(Foam::cos(phi1[i])*Foam::cos(phi3[i])), 
+    (Foam::cos(phi1[i])*Foam::sin(phi2[i])*Foam::sin(phi3[i]))-(Foam::sin(phi1[i])*Foam::cos(phi3[i])),
+    
+    -Foam::sin(phi2[i]), 
+    Foam::sin(phi1[i])*Foam::cos(phi2[i]), 
+    Foam::cos(phi1[i])*Foam::cos(phi2[i])
+);//https://en.wikipedia.org/wiki/Rotation_matrix - 
+//"represents an extrinsic rotation whose (improper) Euler angles are α, β, γ, about axes x, y, z" - phi1 ==alpha, phi2==beta,phi3==gamma
+
+RotationMatrixTemp+=PopBal[i]*temprot;
+
 }
 
-PtrList<volScalarField> Rot2(N_Ori); // pointer to phase fields
 
-for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
-{
+volTensorField RotationMatrix(
+    IOobject(
+        "RotationMatrix",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE),
+        RotationMatrixTemp
+    // mesh,
+    // dimensionedTensor("RotationMatrix", dimensionSet(0, 0, 0, 0, 0), RotationMatrixTemp)//,
+    // zeroGradientFvPatchTensorField::typeName
+    );
 
-    word name_ROT("ROT.2." + name(count));
 
-    Rot2.set(
-        count,
-        new volScalarField(
-            IOobject(
-                name_ROT,
-                runTime.timeName(),
-                mesh,
-                IOobject::READ_IF_PRESENT, // IOobject::MUST_READ,
-                IOobject::AUTO_WRITE),
-            mesh,
-            dimensionedScalar("ROT.2", dimensionSet(0, 0, 0, 0, 0), phi2[count]),
-            zeroGradientFvPatchScalarField::typeName));
-}
 
-PtrList<volScalarField> Rot3(N_Ori); // pointer to phase fields
+// volScalarField Rot1(
+//     IOobject(
+//         "Rot1",
+//         runTime.timeName(),
+//         mesh,
+//         IOobject::READ_IF_PRESENT,
+//         IOobject::AUTO_WRITE),
+//     mesh,
+//     dimensionedScalar("Rot1", dimensionSet(0, 0, 0, 0, 0), 0.0));
 
-for (label count = 0; count < N_Ori; count++) // how to assign the popbal array of fields
-{
 
-    word name_ROT("ROT.3." + name(count));
-
-    Rot3.set(
-        count,
-        new volScalarField(
-            IOobject(
-                name_ROT,
-                runTime.timeName(),
-                mesh,
-                IOobject::READ_IF_PRESENT, // IOobject::MUST_READ,
-                IOobject::AUTO_WRITE),
-            mesh,
-            dimensionedScalar("ROT.3", dimensionSet(0, 0, 0, 0, 0), phi3[count]),
-            zeroGradientFvPatchScalarField::typeName));
-}
 
 // Material TEST();
 

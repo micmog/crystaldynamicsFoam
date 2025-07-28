@@ -69,7 +69,7 @@ Euler_Angles*=0.0;
           for (int jj = 0; jj < 3; jj++)
           {
         // Info<<i<<","<<j<<endl;
-            Elastic_Spin_h_deltaT(ii, jj) = (omega_dot[cell].component(count_index_E)/* - Omega_P[h][cell].component(count_index_E)*/);//shouldnt be the elastic spin, should be the total spin elastic + plastic
+            Elastic_Spin_h_deltaT(ii, jj) = (omega_dot[cell].component(count_index_E) - Omega_P[h][cell].component(count_index_E));//shouldnt be the elastic spin, should be the total spin elastic + plastic
 
             count_index_E++;
           }
@@ -279,7 +279,7 @@ forAll(dsigmadt.boundaryField(), patchI)
           for (int jj = 0; jj < 3; jj++)
           {
         // Info<<i<<","<<j<<endl;
-            Elastic_Spin_h_deltaT(ii, jj) = deltaT_*(omega_dot.boundaryField()[patchI][faceI].component(count_index_E) /*- Omega_P[h].boundaryField()[patchI][faceI].component(count_index_E)*/);//should not be elastic, should be total
+            Elastic_Spin_h_deltaT(ii, jj) = deltaT_*(omega_dot.boundaryField()[patchI][faceI].component(count_index_E) - Omega_P[h].boundaryField()[patchI][faceI].component(count_index_E));//
             // Elastic_Spin_h_sq(ii, jj) = Foam::pow(omega_dot[cell].component(count_index_E) - Omega_P[h][cell].component(count_index_E),2.0);
             count_index_E++;
           }
