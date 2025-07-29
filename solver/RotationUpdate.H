@@ -6,24 +6,24 @@ Euler_Angles*=0.0;
   forAll(mesh.C(), cell)
   {
 
-        label largest_field=-1;
-    double current_largest_value = -1.0;
+    //     label largest_field=-1;
+    // double current_largest_value = -1.0;
 
-    for (label h = 0; h < N_Ori; h++)
-    {
+    // for (label h = 0; h < N_Ori; h++)
+    // {
 
-      if(PopBal[h][cell]>current_largest_value){
-        current_largest_value = PopBal[h][cell];
+    //   if(PopBal[h][cell]>current_largest_value){
+    //     current_largest_value = PopBal[h][cell];
       
-        largest_field = h;
-      }
+    //     largest_field = h;
+    //   }
 
 
-            double phi_1_total = Rot1[h][cell]; // ROT_1[cell];// phi1[h] ;//+ omega_tot[cell].component(5);
+            // double phi_1_total = Rot1[h][cell]; // ROT_1[cell];// phi1[h] ;//+ omega_tot[cell].component(5);
 
-            double phi_2_total = Rot2[h][cell]; // ROT_2[cell];// phi2[h] ;//+ omega_tot[cell].component(2);
+            // double phi_2_total = Rot2[h][cell]; // ROT_2[cell];// phi2[h] ;//+ omega_tot[cell].component(2);
 
-            double phi_3_total = Rot3[h][cell]; // ROT_3[cell];// phi3[h] ;//+ omega_tot[cell].component(1);
+            // double phi_3_total = Rot3[h][cell]; // ROT_3[cell];// phi3[h] ;//+ omega_tot[cell].component(1);
 
 
             Fastor::Tensor<double, 3, 3> Rot_matrix(0.0);
@@ -40,17 +40,17 @@ Euler_Angles*=0.0;
       // Rot_matrix(2, 1) =test_rot_diff[h][cell].component(7);// Foam::sin(phi_1_total) * Foam::cos(phi_2_total);
       // Rot_matrix(2, 2) = test_rot_diff[h][cell].component(8);//Foam::cos(phi_1_total) * Foam::cos(phi_2_total);
 
-      Rot_matrix(0, 0) = Foam::cos(phi_2_total) * Foam::cos(phi_3_total);
-      Rot_matrix(0, 1) = (Foam::sin(phi_1_total) * Foam::sin(phi_2_total) * Foam::cos(phi_3_total)) - (Foam::cos(phi_1_total) * Foam::sin(phi_3_total));
-      Rot_matrix(0, 2) = (Foam::cos(phi_1_total) * Foam::sin(phi_2_total) * Foam::cos(phi_3_total)) + (Foam::sin(phi_1_total) * Foam::sin(phi_3_total));
+      Rot_matrix(0, 0) = RotationMatrix[cell].component(0);// Foam::cos(phi_2_total) * Foam::cos(phi_3_total);
+      Rot_matrix(0, 1) = RotationMatrix[cell].component(1);// (Foam::sin(phi_1_total) * Foam::sin(phi_2_total) * Foam::cos(phi_3_total)) - (Foam::cos(phi_1_total) * Foam::sin(phi_3_total));
+      Rot_matrix(0, 2) = RotationMatrix[cell].component(2);// (Foam::cos(phi_1_total) * Foam::sin(phi_2_total) * Foam::cos(phi_3_total)) + (Foam::sin(phi_1_total) * Foam::sin(phi_3_total));
 
-      Rot_matrix(1, 0) = Foam::cos(phi_2_total) * Foam::sin(phi_3_total);
-      Rot_matrix(1, 1) = (Foam::sin(phi_1_total) * Foam::sin(phi_2_total) * Foam::sin(phi_3_total)) + (Foam::cos(phi_1_total) * Foam::cos(phi_3_total));
-      Rot_matrix(1, 2) = (Foam::cos(phi_1_total) * Foam::sin(phi_2_total) * Foam::sin(phi_3_total)) - (Foam::sin(phi_1_total) * Foam::cos(phi_3_total));
+      Rot_matrix(1, 0) = RotationMatrix[cell].component(3);// Foam::cos(phi_2_total) * Foam::sin(phi_3_total);
+      Rot_matrix(1, 1) = RotationMatrix[cell].component(4);// (Foam::sin(phi_1_total) * Foam::sin(phi_2_total) * Foam::sin(phi_3_total)) + (Foam::cos(phi_1_total) * Foam::cos(phi_3_total));
+      Rot_matrix(1, 2) = RotationMatrix[cell].component(5);// (Foam::cos(phi_1_total) * Foam::sin(phi_2_total) * Foam::sin(phi_3_total)) - (Foam::sin(phi_1_total) * Foam::cos(phi_3_total));
 
-      Rot_matrix(2, 0) = -Foam::sin(phi_2_total);
-      Rot_matrix(2, 1) = Foam::sin(phi_1_total) * Foam::cos(phi_2_total);
-      Rot_matrix(2, 2) = Foam::cos(phi_1_total) * Foam::cos(phi_2_total);
+      Rot_matrix(2, 0) = RotationMatrix[cell].component(6);// -Foam::sin(phi_2_total);
+      Rot_matrix(2, 1) = RotationMatrix[cell].component(7);// Foam::sin(phi_1_total) * Foam::cos(phi_2_total);
+      Rot_matrix(2, 2) = RotationMatrix[cell].component(8);// Foam::cos(phi_1_total) * Foam::cos(phi_2_total);
 
 
 
@@ -69,7 +69,7 @@ Euler_Angles*=0.0;
           for (int jj = 0; jj < 3; jj++)
           {
         // Info<<i<<","<<j<<endl;
-            Elastic_Spin_h_deltaT(ii, jj) = (omega_dot[cell].component(count_index_E) - Omega_P[h][cell].component(count_index_E));//shouldnt be the elastic spin, should be the total spin elastic + plastic
+            Elastic_Spin_h_deltaT(ii, jj) = (omega_dot[cell].component(count_index_E) - Omega_P[cell].component(count_index_E));//shouldnt be the elastic spin, should be the total spin elastic + plastic
 
             count_index_E++;
           }
@@ -195,18 +195,18 @@ Euler_Angles*=0.0;
 
     }
 
-    Rot1[h][cell] = psi_angle;//update euler angles for advection
-    Rot2[h][cell] = theta_angle;
-    Rot3[h][cell] = phi_angle;
+    Rot1[cell] = psi_angle;//update euler angles for advection
+    Rot2[cell] = theta_angle;
+    Rot3[cell] = phi_angle;
 
 
 
 
-    }
+    // }
 
-          Euler_Angles[cell].component(0) = Rot1[largest_field][cell];
-      Euler_Angles[cell].component(1) = Rot2[largest_field][cell];
-      Euler_Angles[cell].component(2) = Rot3[largest_field][cell];
+      // Euler_Angles[cell].component(0) = Rot1[largest_field][cell];
+      // Euler_Angles[cell].component(1) = Rot2[largest_field][cell];
+      // Euler_Angles[cell].component(2) = Rot3[largest_field][cell];
 
   }
 
@@ -230,41 +230,41 @@ forAll(dsigmadt.boundaryField(), patchI)
         {
 
 
-                    label largest_field=-1;
-    double current_largest_value = -1.0;
+    //                 label largest_field=-1;
+    // double current_largest_value = -1.0;
 
 
-    for (label h = 0; h < N_Ori; h++)
-    {
+    // for (label h = 0; h < N_Ori; h++)
+    // {
 
 
-        if(PopBal[h].boundaryField()[patchI][faceI]>current_largest_value){
-        current_largest_value = PopBal[h].boundaryField()[patchI][faceI];
+      //   if(PopBal[h].boundaryField()[patchI][faceI]>current_largest_value){
+      //   current_largest_value = PopBal[h].boundaryField()[patchI][faceI];
       
-        largest_field = h;
-      }
+      //   largest_field = h;
+      // }
 
 
-          double phi_1_total = Rot1[h].boundaryField()[patchI][faceI]; // ROT_1[cell];// phi1[h] ;//+ omega_tot[cell].component(5);
+      //     double phi_1_total = Rot1[h].boundaryField()[patchI][faceI]; // ROT_1[cell];// phi1[h] ;//+ omega_tot[cell].component(5);
 
-      double phi_2_total = Rot2[h].boundaryField()[patchI][faceI]; // ROT_2[cell];// phi2[h] ;//+ omega_tot[cell].component(2);
+      // double phi_2_total = Rot2[h].boundaryField()[patchI][faceI]; // ROT_2[cell];// phi2[h] ;//+ omega_tot[cell].component(2);
 
-      double phi_3_total = Rot3[h].boundaryField()[patchI][faceI]; // ROT_3[cell];// phi3[h] ;//+ omega_tot[cell].component(1);
+      // double phi_3_total = Rot3[h].boundaryField()[patchI][faceI]; // ROT_3[cell];// phi3[h] ;//+ omega_tot[cell].component(1);
 
 
       Fastor::Tensor<double, 3, 3> Rot_matrix(0.0);
 
-      Rot_matrix(0, 0) = Foam::cos(phi_2_total) * Foam::cos(phi_3_total);
-      Rot_matrix(0, 1) = (Foam::sin(phi_1_total) * Foam::sin(phi_2_total) * Foam::cos(phi_3_total)) - (Foam::cos(phi_1_total) * Foam::sin(phi_3_total));
-      Rot_matrix(0, 2) = (Foam::cos(phi_1_total) * Foam::sin(phi_2_total) * Foam::cos(phi_3_total)) + (Foam::sin(phi_1_total) * Foam::sin(phi_3_total));
+      Rot_matrix(0, 0) = RotationMatrix.boundaryField()[patchI][faceI].component(0);//Foam::cos(phi_2_total) * Foam::cos(phi_3_total);
+      Rot_matrix(0, 1) = RotationMatrix.boundaryField()[patchI][faceI].component(1);//(Foam::sin(phi_1_total) * Foam::sin(phi_2_total) * Foam::cos(phi_3_total)) - (Foam::cos(phi_1_total) * Foam::sin(phi_3_total));
+      Rot_matrix(0, 2) = RotationMatrix.boundaryField()[patchI][faceI].component(2);//(Foam::cos(phi_1_total) * Foam::sin(phi_2_total) * Foam::cos(phi_3_total)) + (Foam::sin(phi_1_total) * Foam::sin(phi_3_total));
 
-      Rot_matrix(1, 0) = Foam::cos(phi_2_total) * Foam::sin(phi_3_total);
-      Rot_matrix(1, 1) = (Foam::sin(phi_1_total) * Foam::sin(phi_2_total) * Foam::sin(phi_3_total)) + (Foam::cos(phi_1_total) * Foam::cos(phi_3_total));
-      Rot_matrix(1, 2) = (Foam::cos(phi_1_total) * Foam::sin(phi_2_total) * Foam::sin(phi_3_total)) - (Foam::sin(phi_1_total) * Foam::cos(phi_3_total));
+      Rot_matrix(1, 0) = RotationMatrix.boundaryField()[patchI][faceI].component(3);//Foam::cos(phi_2_total) * Foam::sin(phi_3_total);
+      Rot_matrix(1, 1) = RotationMatrix.boundaryField()[patchI][faceI].component(4);//(Foam::sin(phi_1_total) * Foam::sin(phi_2_total) * Foam::sin(phi_3_total)) + (Foam::cos(phi_1_total) * Foam::cos(phi_3_total));
+      Rot_matrix(1, 2) = RotationMatrix.boundaryField()[patchI][faceI].component(5);//(Foam::cos(phi_1_total) * Foam::sin(phi_2_total) * Foam::sin(phi_3_total)) - (Foam::sin(phi_1_total) * Foam::cos(phi_3_total));
 
-      Rot_matrix(2, 0) = -Foam::sin(phi_2_total);
-      Rot_matrix(2, 1) = Foam::sin(phi_1_total) * Foam::cos(phi_2_total);
-      Rot_matrix(2, 2) = Foam::cos(phi_1_total) * Foam::cos(phi_2_total);
+      Rot_matrix(2, 0) = RotationMatrix.boundaryField()[patchI][faceI].component(6);//-Foam::sin(phi_2_total);
+      Rot_matrix(2, 1) = RotationMatrix.boundaryField()[patchI][faceI].component(7);//Foam::sin(phi_1_total) * Foam::cos(phi_2_total);
+      Rot_matrix(2, 2) = RotationMatrix.boundaryField()[patchI][faceI].component(8);//Foam::cos(phi_1_total) * Foam::cos(phi_2_total);
       // https://en.wikipedia.org/wiki/Rotation_matrix -
       //"represents an extrinsic rotation whose (improper) Euler angles are α, β, γ, about axes x, y, z" - phi1 ==alpha, phi2==beta,phi3==gamma
 
@@ -279,7 +279,7 @@ forAll(dsigmadt.boundaryField(), patchI)
           for (int jj = 0; jj < 3; jj++)
           {
         // Info<<i<<","<<j<<endl;
-            Elastic_Spin_h_deltaT(ii, jj) = deltaT_*(omega_dot.boundaryField()[patchI][faceI].component(count_index_E) - Omega_P[h].boundaryField()[patchI][faceI].component(count_index_E));//
+            Elastic_Spin_h_deltaT(ii, jj) = deltaT_*(omega_dot.boundaryField()[patchI][faceI].component(count_index_E) - Omega_P.boundaryField()[patchI][faceI].component(count_index_E));//
             // Elastic_Spin_h_sq(ii, jj) = Foam::pow(omega_dot[cell].component(count_index_E) - Omega_P[h][cell].component(count_index_E),2.0);
             count_index_E++;
           }
@@ -359,19 +359,19 @@ forAll(dsigmadt.boundaryField(), patchI)
 
     }
 
-    Rot1[h].boundaryFieldRef()[patchI][faceI] = psi_angle;//update euler angles for advection
-    Rot2[h].boundaryFieldRef()[patchI][faceI] = theta_angle;
-    Rot3[h].boundaryFieldRef()[patchI][faceI] = phi_angle;
+    Rot1.boundaryFieldRef()[patchI][faceI] = psi_angle;//update euler angles for advection
+    Rot2.boundaryFieldRef()[patchI][faceI] = theta_angle;
+    Rot3.boundaryFieldRef()[patchI][faceI] = phi_angle;
 
 
 
 
 
-    }//END LOOP OVER FIELDS
+    // }//END LOOP OVER FIELDS
 
-          Euler_Angles.boundaryFieldRef()[patchI][faceI].component(0) = Rot1[largest_field].boundaryField()[patchI][faceI];
-      Euler_Angles.boundaryFieldRef()[patchI][faceI].component(1) = Rot2[largest_field].boundaryField()[patchI][faceI];
-      Euler_Angles.boundaryFieldRef()[patchI][faceI].component(2) = Rot3[largest_field].boundaryField()[patchI][faceI];
+      //     Euler_Angles.boundaryFieldRef()[patchI][faceI].component(0) = Rot1[largest_field].boundaryField()[patchI][faceI];
+      // Euler_Angles.boundaryFieldRef()[patchI][faceI].component(1) = Rot2[largest_field].boundaryField()[patchI][faceI];
+      // Euler_Angles.boundaryFieldRef()[patchI][faceI].component(2) = Rot3[largest_field].boundaryField()[patchI][faceI];
 
 
 

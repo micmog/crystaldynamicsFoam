@@ -897,8 +897,8 @@ volTensorField RotationMatrixTemp(
         IOobject::NO_READ,
         IOobject::NO_WRITE),
     mesh,
-    dimensionedTensor("RotationMatrixTemp", dimensionSet(0, 0, 0, 0, 0), tensor::zero)//,
-    //  zeroGradientFvPatchTensorField::typeName
+    dimensionedTensor("RotationMatrixTemp", dimensionSet(0, 0, 0, 0, 0), tensor::zero),
+     zeroGradientFvPatchTensorField::typeName
     );
 
 
@@ -944,17 +944,35 @@ volTensorField RotationMatrix(
 
 
 
-// volScalarField Rot1(
-//     IOobject(
-//         "Rot1",
-//         runTime.timeName(),
-//         mesh,
-//         IOobject::READ_IF_PRESENT,
-//         IOobject::AUTO_WRITE),
-//     mesh,
-//     dimensionedScalar("Rot1", dimensionSet(0, 0, 0, 0, 0), 0.0));
+volScalarField Rot1(
+    IOobject(
+        "Rot1",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE),
+    mesh,
+    dimensionedScalar("Rot1", dimensionSet(0, 0, 0, 0, 0), 0.0));
 
+volScalarField Rot2(
+    IOobject(
+        "Rot2",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE),
+    mesh,
+    dimensionedScalar("Rot2", dimensionSet(0, 0, 0, 0, 0), 0.0));
 
+    volScalarField Rot3(
+    IOobject(
+        "Rot3",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE),
+    mesh,
+    dimensionedScalar("Rot3", dimensionSet(0, 0, 0, 0, 0), 0.0));
 
 // Material TEST();
 

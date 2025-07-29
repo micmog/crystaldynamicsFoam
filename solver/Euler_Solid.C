@@ -108,21 +108,21 @@ int main(int argc, char *argv[])
             #include "UEqn.H"
         // #include "setU.H"
             
-
+            // #include "Hardening.H"
             #include "CP.H"
             #include "StressUpdate.H"
 
 
         }
 
-            // #include "PF.H"
-            // #include "TEqn.H"
-            // #include "rhoEqn.H"
+            #include "PF.H"
+            #include "TEqn.H"
+            #include "rhoEqn.H"
             
 
         
-        // #include "RotationUpdate.H"
-        // #include "Advect.H"
+        #include "RotationUpdate.H"
+        #include "Advect.H"
         
     // } while (initialResidual > convergenceTolerance && ++iCorr < nCorr);
 
