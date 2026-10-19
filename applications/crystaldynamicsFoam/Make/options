@@ -9,7 +9,6 @@ EXE_INC = \
     -I./Fastor \
     -DFASTOR_ENABLE_RUNTIME_CHECKS=0	\
     -DNDEBUG	\
-    -march=native
 
 EXE_LIBS = \
     -lfiniteVolume \

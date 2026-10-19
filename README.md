@@ -192,6 +192,10 @@ The `tutorials/` folder contains the verification cases from the paper
 (elastic waves, planar-shock Hugoniot, Riemann problems, phase-field interface
 relaxation) plus the demonstration cases.
 
+Some of these tutorials contain a `dynamicCode` directory,
+and that code also neede to be compiled, using `wmake libso .` from within each
+subdirectory e.g. `tutorials/crystaldynamicsFoam/Circle_Squash/dynamicCode/velocityProfileback`.
+
 ## Citing / Licence
 
 GPLv3. If you use the code please cite the methodology paper, T. Flint et
